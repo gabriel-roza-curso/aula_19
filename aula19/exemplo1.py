@@ -1,6 +1,6 @@
-# import re
-# import unicodedata
-#from utils import limpar_nome_municipio
+# from utils import limpar_nome_municipio
+# Importa a biblioteca Matplotlib para criar os gráficos
+# pip install matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -10,18 +10,18 @@ try:
     print("Obtendo dados...")
     ENDERECO_DADOS = "https://www.ispdados.rj.gov.br/Arquivos/BaseDPEvolucaoMensalCisp.csv"
 
-
+    # Buscar a base de dados CSV online do site ISP (Instituto de Segurança Pública)
+    # encoding='iso-8859-1' - Codificação dos caracteres com acentuação
+    # outras opções: utf-8, iso-8859-1, latin1, cp1252
+    # encodings principais: https://docs.python.org/3/library/codecs.html#standard-encodings
     df_ocorrencias = pd.read_csv(ENDERECO_DADOS, sep=';', encoding='iso-8859-1')
-
-    # for i in range(2):
-    #     df_ocorrencias['munic'] = df_ocorrencias['munic'].apply(limpar_nome_municipio)
 
     # Demilitando somente as variáveis do Exemplo01: munic e roubo_veiculo
     df_ocorrencias = df_ocorrencias[['munic', 'roubo_veiculo']]
 
     # Totalizar roubo de veiculo por municipio (agrupar e somar)
-    # reset_index(), traz de volta os índeces que numera as colunas, pois eles se perdem
-    # nesta operação
+    # reset_index(), traz de volta os índices que numera as colunas, pois se
+    # perdem nesta operação
     df_roubo_veiculo = df_ocorrencias.groupby('munic').sum(['roubo_veiculo']).reset_index()
 
     # Printando as linhas iniciais com o método head() apenas para ver se os dados
@@ -59,7 +59,7 @@ try:
     mediana_roubo_veiculo = np.median(array_roubo_veiculo)
 
     # Distânicia entre média e mediana
-    # A distância entre a média e a medida de assimetria
+    # A distância entre a média e a mediana é uma medida de assimetria
     # A distância é obtida dividindo a diferença entre a média e a mediana
     # pela mediana
     # Se a distância for pequena, a distribuição é simétrica
@@ -79,11 +79,11 @@ try:
     # Não tende a haver um padrão e pode ser, que existam outliers (valores discrepantes)
     # Se a média for próxima (25%) a mediana, distribuição é simétrica. Neste 
     # caso, tende a haver um padrão
-    print('\nMedidas de tendência central: ')
-    print(30*'-')
-    print(f'Média de roubo de veículos: {media_roubo_veiculo}')
-    print(f'Mediana de roubo de veículos: {mediana_roubo_veiculo}')
-    print(f'Distância entre média e mediana: {distancia:.3f}')
+    # print('\nMedidas de tendência central: ')
+    # print(30*'-')
+    # print(f'Média de roubo de veículos: {media_roubo_veiculo}')
+    # print(f'Mediana de roubo de veículos: {mediana_roubo_veiculo}')
+    # print(f'Distância entre média e mediana: {distancia:.3f}')
 
 
     # Quartis
@@ -105,14 +105,21 @@ try:
     q2 = np.quantile(array_roubo_veiculo, 0.50, method='weibull') # Q2 é 50% (mediana)
     q3 = np.quantile(array_roubo_veiculo, 0.75, method='weibull') # Q3 é 75%
 
-    print('\nMedidas de posição: ')
-    print(30*'-')
-    print(f'Q1: {q1}')
-    print(f'Q2: {q2}')
-    print(f'Q3: {q3}')
+    # print('\nMedidas de posição: ')
+    # print(30*'-')
+    # print(f'Q1: {q1}')
+    # print(f'Q2: {q2}')
+    # print(f'Q3: {q3}')
 
-    print('Medidas de Dispersão')
-
+    # print("\nMedidas de Dispersão: ")
+    # print(30*"-")
+    # medidas de dispersão são estatísticas que medem a variabilidade ou a dispersão
+    # da distribuição.
+    # A amplitude total é a diferença entre o maior e o menor valor de
+    # uma distribuição.
+    # Serve para identificar a variabilidade dos dados. Quanto maior a
+    # amplitude, maior a variabilidade. Quanto mais perto do zero, menor
+    # a variabilidade.
     maximo = np.max(array_roubo_veiculo)
     minimo = np.min(array_roubo_veiculo)
     amplitude_total = maximo - minimo
@@ -148,23 +155,47 @@ try:
     # Vai identificar os outliers abaixo de q1
     limite_inferior = q1 - (1.5 * iqr)
 
-    print('\nLimites - Medidas de Posição')
-    print(45*'-')
-    print(f'Limite inferior: {limite_inferior}')
-    print(f'Limite superior: {limite_superior}')
+    # print('\nLimites - Medidas de Posição')
+    # print(45*'-')
+    # print(f'Limite inferior: {limite_inferior}')
+    # print(f'Limite superior: {limite_superior}')
 
-    print('\nMedidas')
-    print(f'Limite inferior: {limite_inferior}')
-    print(f'Menor valor:{minimo}')
-    print(f'Q1: {q1}')
-    print(f'Q2: {q2}')
-    print(f'Q3: {q3}')
-    print(F'IQR: {iqr}')
-    print(f'Limite superior: {limite_superior}')
-    print(f'Maior valor:{maximo}')
-    print(f'Média: {media_roubo_veiculo}')
+    # PRINTANDO AS MEDIDAS
+    print('\nPRINTANDO AS MEDIDAS: ')
+    print(30*'-')
+    print(f'Limite Inferior: {limite_inferior}')
+    print(f'Mínimo: {minimo}')
+    print(f'1º Quartil: {q1}')
+    print(f'2º Quartil: {q2}')  # Mediana
+    print(f'3º Quartil: {q3}')
+    print(f'IQR: {iqr}')
+    print(f'Máximo: {maximo}')
+    print(f'Limite Superior: {limite_superior}')
+    
+    print('\nOUTRAS AS MEDIDAS: ')
+    print(30*'-')
+    print(f'Amplitude Total: {amplitude_total}')
+    print(f'Média: {media_roubo_veiculo:.3f}')
     print(f'Mediana: {mediana_roubo_veiculo}')
-    print(f'Distância: {distancia}')
+    print(f'Distância Média e Mediana: {distancia:.4f}')
+
+    variancia = np.var(array_roubo_veiculo)
+
+    distancia_var_media = variancia / (media_roubo_veiculo ** 2)
+
+    print('\nMEDIDAS DE DISPERÇÃO:')
+    print(30 * '-')
+    print(f'A variância foi de: {variancia}')
+    print(f'A distância da média é: {distancia_var_media}')
+
+    desvio_padrao = np.std(array_roubo_veiculo)
+
+    print(f'Este é o desvio padrão: {desvio_padrao}')
+
+    coeficiente = desvio_padrao / media_roubo_veiculo
+
+    print(coeficiente)
+    
     # #### OUTLIERS
     # Obtendo os ouliers inferiores
     # Filtrar o dataframe df_roubo_veiculo para o munics com roubo de veículo
@@ -194,22 +225,87 @@ except Exception as e:
     print(f'Erro ao obter informações sobre padrão de roubo de veículos: {e}')
     exit()
 
+
+# PLOTANDO GRÁFICO
+# Matplotlib
 try:
-    fig, ax = plt.subplots(2,2, figsize=(10, 6))
+    # import matplotlib.pyplot as plt
+    # fig, ax = plt.subplots(figsize=(10, 6))
+    # ax.boxplot(array_roubo_veiculo, vert=False, showmeans=True)
+    
+    plt.subplots(2, 2, figsize=(16, 10))
+    plt.suptitle('Análise de roubo de veículos no RJ') 
 
-    plt.subplot(2, 2, 1)
-    plt.suptitle('Análise')
-
-    plt.subplot(2,2,1)
+    # POSIÇÃO 01
+    # BOXPLOT
+    plt.subplot(2, 2, 1)  
     plt.boxplot(array_roubo_veiculo, vert=False, showmeans=True)
-    plt.title('Boxplot da distribuição')
+    plt.title("Boxplot dos Dados")
 
+    # POSIÇÃO 02
+    # MEDIDAS
+    # Exibição de informações estatísticas
+    plt.subplot(2, 2, 2)
+    plt.title('Medidas Estatísticas')
+    plt.text(0.1, 0.9, f'Limite inferior: {limite_inferior}', fontsize=10)
+    plt.text(0.1, 0.8, f'Menor valor: {minimo}', fontsize=10) 
+    plt.text(0.1, 0.7, f'Q1: {q1}', fontsize=10)
+    plt.text(0.1, 0.6, f'Mediana: {mediana_roubo_veiculo}', fontsize=10)
+    plt.text(0.1, 0.5, f'Q3: {q3}', fontsize=10)
+    plt.text(0.1, 0.4, f'Média: {media_roubo_veiculo:.3f}', fontsize=10)
+    plt.text(0.1, 0.3, f'Maior valor: {maximo}', fontsize=10)
+    plt.text(0.1, 0.2, f'Limite superior: {limite_superior}', fontsize=10)
+
+    plt.text(0.5, 0.9, f'Distância Média e Mediana: {distancia:.4f}', fontsize=10)
+    plt.text(0.5, 0.8, f'IQR: {iqr}', fontsize=10)
+    plt.text(0.5, 0.7, f'Amplitude Total: {amplitude_total}', fontsize=10)
+    
+    # POSIÇÃO 03
+    # OUTLIERS INFERIORES
+    plt.subplot(2, 2, 3)
+    plt.title('Outliers Inferiores')
+    # Se o DataFrame do outliers não estiver vazio
+    if not df_roubo_veiculo_outliers_inferiores.empty:
+        dados_inferiores = df_roubo_veiculo_outliers_inferiores.sort_values(by='roubo_veiculo', ascending=True) #crescente
+        # Gráfico de Barras
+        plt.barh(dados_inferiores['munic'], dados_inferiores['roubo_veiculo'])
+    else:
+        # Se não houver outliers
+        plt.text(0.5, 0.5, 'Sem Outliers Inferiores', ha='center', va='center', fontsize=12)
+        plt.title('Outilers Inferiores')
+        plt.xticks([])
+        plt.yticks([])
+    
+    # POSIÇÃO 04
+    # OUTLIERS SUPERIORES
     plt.subplot(2, 2, 4)
+    plt.title('Outliers Superiores')
+    if not df_roubo_veiculo_outliers_superiores.empty:
+        dados_superiores = df_roubo_veiculo_outliers_superiores.sort_values(by='roubo_veiculo', ascending=True)
 
+        # Cria o gráfico e guarda as barras
+        barras = plt.barh(dados_superiores['munic'], dados_superiores['roubo_veiculo'], color='black')
+        # Adiciona rótulos nas barras
+        plt.bar_label(barras, fmt='%.0f', label_type='edge', fontsize=8, padding=2)
 
+        # Diminui o tamanho da fonte dos eixos
+        plt.xticks(fontsize=8)
+        plt.yticks(fontsize=8)
+
+        plt.title('Outliers Superiores')
+        plt.xlabel('Total Roubos de Veículos')    
+    else:
+        # Se não houver outliers superiores, exibe uma mensagem no lugar.
+        plt.text(0.5, 0.5, 'Sem outliers superiores', ha='center', va='center', fontsize=12)
+        plt.title('Outliers Superiores')
+        plt.xticks([])
+        plt.yticks([])
+
+    # Ajusta os espaços do layout para que os gráficos não fiquem espremidos
     plt.tight_layout()
-
+    # Mostra a figura com os dois gráficos
     plt.show()
-
+    
 except Exception as e:
     print(f'Erro ao plotar {e}')
+    exit()
